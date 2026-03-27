@@ -17,6 +17,7 @@ RUN npx prisma generate
 
 # Build
 WORKDIR /app
+RUN npm run build -w @mafia/shared
 RUN npm run build -w @mafia/server
 
 # Stage 2: Runtime
