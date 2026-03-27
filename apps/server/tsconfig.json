@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mafia/shared": ["../../packages/shared"]
+      "@mafia/shared": ["../../packages/shared/src/index.ts"]
     }
   },
   "include": [

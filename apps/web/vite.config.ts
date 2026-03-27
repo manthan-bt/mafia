@@ -8,7 +8,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@mafia/shared': path.resolve(__dirname, '../../packages/shared'),
+            "@mafia/shared": path.resolve(__dirname, "../../packages/shared/src/index.ts"),
         },
     },
     server: {
