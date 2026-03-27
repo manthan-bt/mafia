@@ -12,10 +12,13 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@mafia/shared": ["../../packages/shared/src/index.ts"]
+      "@mafia/shared": ["../../packages/shared"]
     }
   },
   "include": [
     "src/**/*.ts"
+  ],
+  "references": [
+    { "path": "../../packages/shared" }
   ]
 }

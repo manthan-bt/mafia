@@ -44,7 +44,7 @@ router.get('/leaderboard', async (_req: Request, res: Response) => {
             }
         });
         
-        const leaderboard = topUsers.map((u, i) => ({
+        const leaderboard = topUsers.map((u: any, i: number) => ({
             rank: i + 1,
             username: u.username,
             mmr: u.mmr,
