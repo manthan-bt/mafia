@@ -1,4 +1,4 @@
-import { GameEngine, Player, Role } from '@mafia/shared';
+import { Player } from '@mafia/shared';
 
 export interface Lobby {
     id: string;

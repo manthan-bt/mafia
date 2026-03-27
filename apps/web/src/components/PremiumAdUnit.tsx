@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 const PremiumAdUnit: React.FC<{ size?: 'banner' | 'rectangle', title?: string }> = ({ size = 'rectangle', title = "SPONSORED INTELLIGENCE" }) => {
     return (

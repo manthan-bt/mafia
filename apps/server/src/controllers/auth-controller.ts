@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/register', async (req: Request, res: Response) => {
     const ip = (req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || 'unknown').split(',')[0].trim();
-    const { allowed, remaining } = await RateLimiter.check(ip, 5, 900); // 5 attempts per 15 mins
+    const { allowed } = await RateLimiter.check(ip, 5, 900); // 5 attempts per 15 mins
 
     if (!allowed) {
         return res.status(429).json({ ok: false, error: 'Too many registration attempts. Please wait 15 minutes.' });

@@ -47,11 +47,12 @@ export class BotEngine {
             case Role.POLICE:
                 // Police targets most suspicious non-investigated
                 return targets.sort((a, b) => (bot.suspicionMap?.[b.id] || 0) - (bot.suspicionMap?.[a.id] || 0))[0]?.id || targets[0].id;
-            case Role.DOCTOR:
+            case Role.DOCTOR: {
                 // Doctor saves themselves or least suspicious (likely good) players
                 const self = targets.find(t => t.id === bot.id);
                 if (self && Math.random() > 0.7) return self.id;
                 return targets.sort((a, b) => (bot.suspicionMap?.[a.id] || 0) - (bot.suspicionMap?.[b.id] || 0))[0]?.id || targets[0].id;
+            }
             default:
                 return targets[Math.floor(Math.random() * targets.length)].id;
         }
@@ -79,23 +80,29 @@ export class BotEngine {
     static generateChatMessage(bot: Player, gameState: GameState): string {
         const personality = bot.personality || 'ANALYTICAL';
 
-        const templates: Record<string, Record<string, string[]>> = {
-            [GameState.DISCUSSION_PHASE]: {
-                AGGRESSIVE: ["I'm 100% sure someone here is lying.", "Let's stop talking and start voting.", "Why is everyone so quiet?"],
-                DEFENSIVE: ["I was just doing my job last night.", "Don't look at me, I'm clean.", "I promise I'm on your side."],
-                ANALYTICAL: ["The patterns from last night are interesting.", "We should compare who voted for whom.", "Let's cross-reference the claims."],
-                QUIET: ["Stay sharp.", "The Mafia is still among us.", "..."]
-            },
-            [GameState.VOTING_PHASE]: {
-                AGGRESSIVE: ["Time to pay.", "No mercy for the guilty.", "Die, scumbag."],
-                DEFENSIVE: ["I hope this is the right call.", "Safety first.", "Trusting my gut."],
-                ANALYTICAL: ["Logic dictates this choice.", "Based on the evidence...", "Highest probability target selected."],
-                QUIET: ["Voted.", "Done.", "Protocol followed."]
-            }
+        const discussionPhase = {
+            AGGRESSIVE: ["I'm 100% sure someone here is lying.", "Let's stop talking and start voting.", "Why is everyone so quiet?"],
+            DEFENSIVE: ["I was just doing my job last night.", "Don't look at me, I'm clean.", "I promise I'm on your side."],
+            ANALYTICAL: ["The patterns from last night are interesting.", "We should compare who voted for whom.", "Let's cross-reference the claims."],
+            QUIET: ["Stay sharp.", "The Mafia is still among us.", "..."]
         };
 
-        const phaseTemplates = templates[gameState] || { QUIET: ["..."] };
-        const pool = phaseTemplates[personality] || phaseTemplates.QUIET;
+        const votingPhase = {
+            AGGRESSIVE: ["Time to pay.", "No mercy for the guilty.", "Die, scumbag."],
+            DEFENSIVE: ["I hope this is the right call.", "Safety first.", "Trusting my gut."],
+            ANALYTICAL: ["Logic dictates this choice.", "Based on the evidence...", "Highest probability target selected."],
+            QUIET: ["Voted.", "Done.", "Protocol followed."]
+        };
+
+        let pool: string[];
+        if (gameState === GameState.DISCUSSION_PHASE) {
+            pool = (discussionPhase as any)[personality] || discussionPhase.QUIET;
+        } else if (gameState === GameState.VOTING_PHASE) {
+            pool = (votingPhase as any)[personality] || votingPhase.QUIET;
+        } else {
+            pool = ["..."];
+        }
+
         return pool[Math.floor(Math.random() * pool.length)];
     }
 }

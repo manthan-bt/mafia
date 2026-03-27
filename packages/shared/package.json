@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
-    "build": "tsc",
+    "build": "tsc -b",
     "dev": "tsc --watch"
   },
   "devDependencies": {

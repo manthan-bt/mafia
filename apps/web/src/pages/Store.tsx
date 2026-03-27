@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { audioManager } from '../utils/audioManager';
-import { Coins, Sparkles, Target, ArrowLeft, Zap, Shield, ShoppingCart, Diamond } from 'lucide-react';
+import { Coins, Sparkles, Target, ArrowLeft, Zap, Diamond } from 'lucide-react';
 import PremiumAdUnit from '../components/PremiumAdUnit';
 
 const Store: React.FC = () => {

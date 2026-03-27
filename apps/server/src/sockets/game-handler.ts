@@ -1,10 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { LobbyManager } from '../managers/lobby-manager.js';
-import { GameEngine, GameState, PlayerAction, Player, Role } from '@mafia/shared';
+import { GameEngine, GameState, PlayerAction, Role } from '@mafia/shared';
 import { BotManager } from '../managers/bot-manager.js';
-import { EncryptionService, MMRService } from '@mafia/shared';
-import { MonetizationService } from '../services/monetization-service.js';
-import { AuthService } from '../services/auth-service.js';
 
 export class GameSocketHandler {
     private io: Server;
@@ -285,7 +282,7 @@ export class GameSocketHandler {
         this.io.to(code).emit('chat_message', { sender, senderId: socket.id, content, isBot: false });
     }
 
-    private handleGameFinished(socket: Socket, { code, winner }: any) {
+    private handleGameFinished(_socket: Socket, { code, _winner }: any) {
         const lobby = this.lobbyManager.getLobby(code);
         if (!lobby) return;
         // Persistence logic for stats (as seen in original server.ts)

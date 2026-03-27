@@ -31,7 +31,7 @@ describe('AuthService', () => {
     it('should verify valid tokens', () => {
         const user = { id: 'user-1', username: 'test-user' };
         // Access private method for testing or use a mock
-        // @ts-ignore
+        // @ts-expect-error - issueToken is private but we need to test verification logic
         const token = AuthService.issueToken(user.id, user.username, 'USER');
         const session = AuthService.verifyToken(token);
         

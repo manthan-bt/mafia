@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GameEngine, Role, GameState } from './game-engine.js';
+import { GameEngine, Role } from './game-engine.js';
 
 describe('GameEngine', () => {
     it('should calculate roles correctly for 7 players', () => {
@@ -16,7 +16,7 @@ describe('GameEngine', () => {
             { playerId: 'm1', targetId: 'v1', actionType: 'KILL' },
             { playerId: 'd1', targetId: 'v2', actionType: 'SAVE' },
         ];
-        // @ts-ignore
+        // @ts-expect-error - testing with partial action objects
         const result = GameEngine.resolveNightPhase(actions);
         expect(result.deathId).toBe('v1');
     });
@@ -26,7 +26,7 @@ describe('GameEngine', () => {
             { playerId: 'm1', targetId: 'v1', actionType: 'KILL' },
             { playerId: 'd1', targetId: 'v1', actionType: 'SAVE' },
         ];
-        // @ts-ignore
+        // @ts-expect-error - testing with partial action objects
         const result = GameEngine.resolveNightPhase(actions);
         expect(result.deathId).toBeNull();
         expect(result.savedId).toBe('v1');

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Terminal, Shield, Cpu, Fingerprint } from 'lucide-react';
+import { Send, Terminal } from 'lucide-react';
 import { useSocket } from '../contexts/SocketContext';
 
 interface Message {
@@ -20,7 +20,7 @@ interface ChatProps {
     playerName?: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ lobbyCode, encryptionKey, playerName }) => {
+const Chat: React.FC<ChatProps> = ({ lobbyCode, encryptionKey: _encryptionKey, playerName }) => {
     const socket = useSocket();
     const [messages, setMessages] = useState<Message[]>([
         { id: 'sys-init', sender: 'SYSTEM', content: 'Secure channel established. All communications encrypted.', timestamp: Date.now(), isSystem: true }

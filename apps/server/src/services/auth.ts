@@ -1,4 +1,4 @@
-import { createHash, createHmac, randomBytes, pbkdf2Sync } from 'crypto';
+import { createHmac, randomBytes, pbkdf2Sync } from 'crypto';
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 const HMAC_SECRET = process.env.AUTH_SECRET || 'mafia-nightfall-hmac-k3y-2026-' + randomBytes(8).toString('hex');

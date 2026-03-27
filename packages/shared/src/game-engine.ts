@@ -73,8 +73,7 @@ export class GameEngine {
   static resolveNightPhase(actions: PlayerAction[]): NightRoundResult {
     const mafiaAction = actions.find((a) => a.actionType === 'KILL');
     const doctorAction = actions.find((a) => a.actionType === 'SAVE');
-    const policeAction = actions.find((a) => a.actionType === 'INVESTIGATE');
-
+    const _policeAction = actions.find((a) => a.actionType === 'INVESTIGATE');
     const result: NightRoundResult = {
       deathId: null,
       savedId: doctorAction?.targetId ?? null,

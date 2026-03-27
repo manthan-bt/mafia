@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Shield, Crosshair, Skull, Activity, Search, Calendar, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Trophy, Shield, Crosshair, Skull, Activity, Calendar, ChevronRight, ChevronLeft, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Ranked: React.FC = () => {
     const navigate = useNavigate();
     const [profile, setProfile] = React.useState<any>(null);
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [_isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         fetchProfile();
@@ -195,7 +195,7 @@ const Ranked: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {history.map((match, i) => (
+                                {history.map((match, _i) => (
                                     <tr key={match.id} className="border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors group cursor-pointer">
                                         <td className="py-5 text-sm font-black font-orbitron">{match.id}</td>
                                         <td className="py-5 text-xs font-bold text-gray-300">{match.role}</td>

@@ -1,4 +1,5 @@
-import { Role } from './game-engine.js';
+// Remove unused import
+
 
 export interface PerformanceMetrics {
     survived: boolean;

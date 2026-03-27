@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Activity, Users, Server, HardDrive, Cpu,
+    Activity, Users, HardDrive, Cpu,
     ShieldAlert, Terminal, RefreshCcw, Search,
     ChevronRight, Zap,
     Database, Network, Clock
@@ -30,7 +30,7 @@ interface Operative {
 export default function AdminDashboard() {
     const [stats, setStats] = useState<SystemStats | null>(null);
     const [users, setUsers] = useState<Operative[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [_loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'OPERATIVES' | 'TERMINAL'>('OVERVIEW');
     const [searchQuery, setSearchQuery] = useState('');

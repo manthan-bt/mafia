@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma.js';
-import { createHash, createHmac, randomBytes, pbkdf2Sync } from 'crypto';
+import { createHmac, randomBytes, pbkdf2Sync } from 'crypto';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

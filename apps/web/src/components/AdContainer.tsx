@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, ExternalLink, Zap } from 'lucide-react';
+import { Shield, Zap } from 'lucide-react';
 
 interface AdContainerProps {
     type: 'BANNER' | 'SIDEBAR' | 'POST_MATCH';

@@ -1,5 +1,3 @@
-import { Server } from 'socket.io';
-
 interface QueuePlayer {
     id: string;
     name: string;

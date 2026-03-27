@@ -24,7 +24,7 @@ export class ProfileService {
         };
     }
 
-    static updateStats(userId: string, matchData: any) {
+    static updateStats(_userId: string, _matchData: any) {
         // prisma.playerStats.update(...)
     }
 }

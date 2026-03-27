@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Shield, ArrowUp, ArrowDown, Search, Globe, ChevronLeft } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Shield, ArrowUp, ArrowDown, Search, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Leaderboard: React.FC = () => {
     const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Volume2, Monitor, Shield, Radio, ArrowLeft, Sliders, Zap, Fingerprint, Lock, Globe } from 'lucide-react';
+import { Volume2, Monitor, Radio, ArrowLeft, Sliders, Zap, Fingerprint, Lock, Globe } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { audioManager } from '../utils/audioManager';
 

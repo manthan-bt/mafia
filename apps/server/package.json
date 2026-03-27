@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "ts-node src/main.ts",
-    "build": "tsc",
+    "build": "tsc -b",
     "start": "node dist/main.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",

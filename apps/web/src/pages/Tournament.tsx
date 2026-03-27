@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Swords, Zap, Radio, Clock, ChevronRight, ChevronLeft, Filter } from 'lucide-react';
+import { Radio, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Tournament: React.FC = () => {

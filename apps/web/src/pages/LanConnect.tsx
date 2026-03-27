@@ -81,7 +81,7 @@ const LanConnect: React.FC = () => {
                             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Step 2 — Friends (Same WiFi)</p>
                             <p className="text-[10px] text-gray-500 font-black uppercase tracking-wider leading-relaxed">
                                 Connect to the same WiFi, then open a browser and type the address above.
-                                They'll land on the game and connect automatically — no apps, no IP entry.
+                                They&apos;ll land on the game and connect automatically — no apps, no IP entry.
                             </p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@ const LanConnect: React.FC = () => {
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">Step 3 — Start Playing</p>
                             <p className="text-[10px] text-gray-500 font-black uppercase tracking-wider leading-relaxed">
-                                Create a Private Room, share the 6-letter code with friends, and launch the game when everyone's in the lobby.
+                                Create a Private Room, share the 6-letter code with friends, and launch the game when everyone&apos;s in the lobby.
                             </p>
                         </div>
                     </div>

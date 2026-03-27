@@ -26,8 +26,6 @@ export class AntiCheatService {
         // 2. Target/Vote Correlation
         // This would ideally look across multiple matches in a real DB, 
         // but for single match analysis:
-        const mafias = history.filter(p => p.role === 'MAFIA');
-        const villagers = history.filter(p => p.role === 'VILLAGER');
 
         // Check if Mafia consistently avoids targeting specific Villagers (Teaming)
         return flags;
