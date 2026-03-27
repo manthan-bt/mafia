@@ -18,6 +18,14 @@ The project follows an industry-standard **Apps/Packages** monorepo pattern:
 - **Security**: PBKDF2 hashing, HMAC sessions, and code obfuscation.
 - **CI/CD**: Automated GitHub Actions for testing and Docker verification.
 
+## 📖 Documentation
+
+Detailed documentation is available in the [docs/](./docs/) directory:
+- [Architecture](./docs/architecture.md)
+- [Installation Guide](./docs/installation.md)
+- [Build Instructions](./docs/build-instructions.md)
+- [Release Notes](./docs/release-notes.md)
+
 ## 🚦 Getting Started
 
 ### Prerequisites

@@ -13,6 +13,7 @@ To create the most immersive, scalable, and secure digital social deduction expe
 - [x] Sophisticated Bot AI with personality and suspicion maps.
 - [x] Production-grade security (PBKDF2, HMAC, Rate Limiting).
 - [x] Dockerization & CI/CD pipeline.
+- [x] Multi-platform support (Web, Mobile, Desktop integration).
 
 ## 🚀 Phase 2: Live Service Expansion (In Progress)
 - [ ] **Advanced Anti-Cheat:** Behavioral analysis to detect "Teaming" patterns.

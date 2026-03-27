@@ -9,6 +9,7 @@
   "scripts": {
     "dev:server": "npm run dev -w @mafia/server",
     "dev:web": "npm run dev -w @mafia/web",
+    "dev:desktop": "npm run start -w @mafia/desktop",
     "build": "npm run build -w @mafia/shared && npm run build -w @mafia/server && npm run build -w @mafia/web",
     "test": "npm test -w @mafia/shared && npm test -w @mafia/server",
     "prisma:generate": "npm run prisma:generate -w @mafia/server",
