@@ -2,6 +2,8 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import * as dotenv from 'dotenv';
 import { connectRedis } from './src/services/redis-service.js';
 import { LobbyManager } from './lobby-manager.js';
@@ -12,6 +14,24 @@ import { SocketManager } from './src/sockets/socket-manager.js';
 dotenv.config();
 
 const app = express();
+
+// Security Middlewares
+app.use(helmet());
+app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+    methods: ['GET', 'POST'],
+    credentials: true,
+}));
+
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { ok: false, error: 'Too many requests from this IP.' }
+});
+
+app.use('/api', apiLimiter);
+app.use(express.json({ limit: '10kb' }));
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
@@ -19,10 +39,6 @@ const io = new Server(httpServer, {
         methods: ['GET', 'POST'],
     },
 });
-
-// Middleware
-app.use(cors());
-app.use(express.json());
 
 // Services & Managers
 const lobbyManager = new LobbyManager();

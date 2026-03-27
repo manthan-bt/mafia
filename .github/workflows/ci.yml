@@ -18,9 +18,10 @@ jobs:
       with:
         node-version: 18.x
         cache: 'npm'
+        cache-dependency-path: package-lock.json
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Generate Prisma Client
       run: npm run prisma:generate -w server
@@ -40,7 +41,7 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Set up Docker Buildx
-      uses: actions/setup-docker-action@v1 # Note: Standardizing on community actions or native docker commands
+      uses: docker/setup-buildx-action@v2
 
     - name: Build Server Image
       run: docker build -t mafia-server -f server/Dockerfile .

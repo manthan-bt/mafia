@@ -171,7 +171,25 @@ export class GameSocketHandler {
         if (!lobby) return;
 
         const playerId = botId || socket.id;
+        const player = lobby.players.find(p => p.id === playerId);
+
+        // --- ANTI-CHEAT VALIDATION ---
+        if (!player) return;
+        if (!player.isAlive) {
+            console.warn(`[ANTI-CHEAT] Dead player ${player.name} tried to act.`);
+            return;
+        }
+        if (player.role === Role.VILLAGER) {
+            console.warn(`[ANTI-CHEAT] Villager ${player.name} tried to perform night action.`);
+            return;
+        }
+
         const actions = this.getLobbyActions(lobby);
+        if (actions.has(playerId)) {
+            console.warn(`[ANTI-CHEAT] Player ${player.name} tried to act twice.`);
+            return;
+        }
+
         actions.set(playerId, action);
 
         const specializedAlive = lobby.players.filter(p => p.isAlive && p.role !== Role.VILLAGER).length;
@@ -210,9 +228,26 @@ export class GameSocketHandler {
         if (!lobby) return;
 
         const voterId = botId || socket.id;
-        const votes = this.getLobbyVotes(lobby);
-        votes.set(voterId, targetId);
+        const voter = lobby.players.find(p => p.id === voterId);
 
+        // --- ANTI-CHEAT VALIDATION ---
+        if (!voter || !voter.isAlive) {
+            console.warn(`[ANTI-CHEAT] Non-existent or dead player ${voterId} tried to vote.`);
+            return;
+        }
+        const target = lobby.players.find(p => p.id === targetId);
+        if (!target || !target.isAlive) {
+            console.warn(`[ANTI-CHEAT] Player ${voter.name} tried to vote for non-existent or dead target ${targetId}.`);
+            return;
+        }
+
+        const votes = this.getLobbyVotes(lobby);
+        if (votes.has(voterId)) {
+            console.warn(`[ANTI-CHEAT] Player ${voter.name} tried to vote twice.`);
+            return;
+        }
+
+        votes.set(voterId, targetId);
         const alivePlayers = lobby.players.filter(p => p.isAlive);
         if (votes.size >= alivePlayers.length) {
             this.resolveVote(code);

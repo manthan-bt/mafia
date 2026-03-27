@@ -74,16 +74,30 @@ export class AuthService {
     static verifyToken(token: string): SessionData | null {
         try {
             const [payloadB64, signature] = token.split('.');
+            if (!payloadB64 || !signature) return null;
+
             const payloadStr = Buffer.from(payloadB64, 'base64').toString();
             const expectedSignature = createHmac('sha256', HMAC_SECRET).update(payloadStr).digest('hex');
 
-            if (signature !== expectedSignature) return null;
+            // Constant-time comparison to prevent timing attacks
+            if (signature.length !== expectedSignature.length) return null;
+            let diff = 0;
+            for (let i = 0; i < signature.length; i++) {
+                diff |= signature.charCodeAt(i) ^ expectedSignature.charCodeAt(i);
+            }
+            if (diff !== 0) return null;
 
             const data = JSON.parse(payloadStr) as SessionData;
-            if (Date.now() > data.expiresAt) return null;
+            
+            // Absolute expiration check
+            if (Date.now() > data.expiresAt) {
+                console.warn(`[SECURITY] Token expired for user ${data.userId}`);
+                return null;
+            }
 
             return data;
-        } catch {
+        } catch (error) {
+            console.error('[SECURITY] Token verification failed:', error);
             return null;
         }
     }
