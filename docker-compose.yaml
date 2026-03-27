@@ -2,7 +2,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: apps/server/Dockerfile
     ports:
       - "3005:3005"
     environment:
@@ -20,7 +20,7 @@ services:
   web-client:
     build:
       context: .
-      dockerfile: web-client/Dockerfile
+      dockerfile: apps/web/Dockerfile
     ports:
       - "80:80"
     depends_on:

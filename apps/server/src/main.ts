@@ -5,11 +5,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import * as dotenv from 'dotenv';
-import { connectRedis } from './src/services/redis-service.js';
-import { LobbyManager } from './lobby-manager.js';
-import AuthController from './src/controllers/auth-controller.js';
-import UserController from './src/controllers/user-controller.js';
-import { SocketManager } from './src/sockets/socket-manager.js';
+import { connectRedis } from './services/redis-service.js';
+import { LobbyManager } from './managers/lobby-manager.js';
+import AuthController from './controllers/auth-controller.js';
+import UserController from './controllers/user-controller.js';
+import { SocketManager } from './sockets/socket-manager.js';
 
 dotenv.config();
 

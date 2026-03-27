@@ -1,10 +1,9 @@
 import { Server, Socket } from 'socket.io';
-import { LobbyManager } from '../../lobby-manager.js';
-import { GameEngine, GameState, PlayerAction, Player, Role } from '../../../shared/game-engine.js';
-import { BotManager } from '../../bot-manager.js';
-import { EncryptionService } from '../../../shared/encryption-service.js';
-import { MMRService } from '../../../shared/mmr-service.js';
-import { MonetizationService } from '../../monetization-service.js';
+import { LobbyManager } from '../managers/lobby-manager.js';
+import { GameEngine, GameState, PlayerAction, Player, Role } from '@mafia/shared';
+import { BotManager } from '../managers/bot-manager.js';
+import { EncryptionService, MMRService } from '@mafia/shared';
+import { MonetizationService } from '../services/monetization-service.js';
 import { AuthService } from '../services/auth-service.js';
 
 export class GameSocketHandler {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Role } from '../../../shared/game-engine';
+import { Role } from '@mafia/shared';
 
 interface CardRevealProps {
     role: Role;

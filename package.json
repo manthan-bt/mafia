@@ -3,17 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "web-client",
-    "server",
-    "shared",
-    "mobile"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "dev:server": "npm run dev -w server",
-    "dev:web": "npm run dev -w web-client",
-    "build": "npm run build -w shared && npm run build -w server && npm run build -w web-client",
-    "test": "npm test -w shared && npm test -w server",
-    "prisma:generate": "npm run prisma:generate -w server",
+    "dev:server": "npm run dev -w @mafia/server",
+    "dev:web": "npm run dev -w @mafia/web",
+    "build": "npm run build -w @mafia/shared && npm run build -w @mafia/server && npm run build -w @mafia/web",
+    "test": "npm test -w @mafia/shared && npm test -w @mafia/server",
+    "prisma:generate": "npm run prisma:generate -w @mafia/server",
     "docker:up": "docker-compose up --build",
     "docker:down": "docker-compose down",
     "lint": "eslint . --ext .ts,.tsx"

@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "rootDir": "..",
+    "rootDir": "src",
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,13 +12,10 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "../shared/*": [
-        "../shared/*"
-      ]
+      "@mafia/shared": ["../../packages/shared/src/index.ts"]
     }
   },
   "include": [
-    "**/*.ts",
-    "../shared/**/*.ts"
+    "src/**/*.ts"
   ]
 }

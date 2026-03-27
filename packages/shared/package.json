@@ -1,12 +1,15 @@
 {
-  "name": "shared",
+  "name": "@mafia/shared",
   "version": "1.0.0",
-  "description": "",
+  "description": "Common Mafia game logic and types",
   "type": "module",
-  "main": "game-engine.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "vitest run",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "devDependencies": {
     "vitest": "^1.6.0",

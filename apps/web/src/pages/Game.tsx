@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../contexts/SocketContext';
-import { GameState, Role, Player, NightRoundResult } from '@shared/game-engine';
+import { GameState, Role, Player, NightRoundResult } from '@mafia/shared';
 import { Skull, Target, Heart, Search, Moon, Sun, Cpu, Fingerprint, ShieldAlert, Shield, Users, Clock, ChevronRight } from 'lucide-react';
 import Chat from '../components/Chat';
 import RoleReveal from '../components/RoleReveal';

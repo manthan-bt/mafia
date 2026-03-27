@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Target, Skull, Check, UserX, AlertTriangle } from 'lucide-react';
-import { Player } from '@shared/game-engine';
+import { Player } from '@mafia/shared';
 
 interface VotingProps {
     players: Player[];

@@ -1,5 +1,5 @@
-import { Role, PlayerAction, GameState, Player } from '../shared/game-engine.js';
-import { BotEngine, BotDifficulty } from '../shared/bot-engine.js';
+import { Role, PlayerAction, GameState, Player } from '@mafia/shared';
+import { BotEngine, BotDifficulty } from '@mafia/shared';
 import { Server } from 'socket.io';
 
 export class BotManager {

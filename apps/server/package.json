@@ -1,13 +1,13 @@
 {
-  "name": "server",
+  "name": "@mafia/server",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/server.js",
+  "description": "Mafia Game Backend Server",
+  "main": "dist/main.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node server.ts",
+    "dev": "ts-node src/main.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/main.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",

@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { redis } from '../services/redis-service.js';
-import { LobbyManager } from '../../lobby-manager.js';
+import { LobbyManager } from '../managers/lobby-manager.js';
 import { GameSocketHandler } from './game-handler.js';
 
 export class SocketManager {

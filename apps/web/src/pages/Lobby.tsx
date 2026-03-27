@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../contexts/SocketContext';
-import { Player } from '@shared/game-engine';
+import { Player } from '@mafia/shared';
 import { Network, Fingerprint, Play, Cpu, ArrowLeft, Hexagon, Copy, Check } from 'lucide-react';
 import { audioManager } from '../utils/audioManager';
 
