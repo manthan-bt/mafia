@@ -7,5 +7,15 @@
     "server",
     "shared",
     "mobile"
-  ]
+  ],
+  "scripts": {
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web-client",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w web-client",
+    "test": "npm test -w shared && npm test -w server",
+    "prisma:generate": "npm run prisma:generate -w server",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down",
+    "lint": "eslint . --ext .ts,.tsx"
+  }
 }

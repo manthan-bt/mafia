@@ -143,19 +143,23 @@ const Chat: React.FC<ChatProps> = ({ lobbyCode, encryptionKey, playerName }) => 
             {/* INPUT ROW */}
             <div className="p-4 bg-black/40 border-t border-white/10 relative">
                 <div className="flex items-center gap-3 bg-white/[0.03] border border-white/5 rounded-xl px-4 py-1.5 focus-within:border-red-500/30 transition-all">
+                    <label htmlFor="chat-input" className="sr-only">Chat message</label>
                     <Terminal size={12} className="text-white/20" />
                     <input
+                        id="chat-input"
                         type="text"
                         placeholder="INPUT_NEURAL_DATA..."
                         className="flex-1 bg-transparent py-2 text-[10px] font-black uppercase tracking-widest outline-none placeholder:text-white/10 text-white/80"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                        autoComplete="off"
                     />
                     <button
                         onClick={handleSend}
                         disabled={!input.trim()}
                         className="p-1.5 text-white/20 hover:text-red-500 transition-all disabled:opacity-30 active:scale-90"
+                        aria-label="Send message"
                     >
                         <Send size={14} />
                     </button>

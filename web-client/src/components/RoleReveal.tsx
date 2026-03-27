@@ -209,7 +209,12 @@ const RoleReveal: React.FC<RoleRevealProps> = ({ role, onComplete }) => {
 
             {/* Clicking anywhere dismisses */}
             {phase >= 3 && (
-                <div className="absolute inset-0 cursor-pointer" onClick={onComplete} />
+                <button
+                    className="absolute inset-0 cursor-pointer bg-transparent border-none w-full h-full focus:outline-none"
+                    onClick={onComplete}
+                    aria-label="Click to continue"
+                    autoFocus
+                />
             )}
         </motion.div>
     );

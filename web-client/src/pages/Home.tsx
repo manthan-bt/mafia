@@ -22,7 +22,8 @@ const Home: React.FC = () => {
         try {
             const token = localStorage.getItem('mafia_token');
             if (!token) return;
-            const res = await fetch('http://localhost:3005/api/user/profile', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3005';
+            const res = await fetch(`${apiUrl}/api/user/profile`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -83,6 +84,7 @@ const Home: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
                         onClick={() => handleNavigation('/play')}
                         className="col-span-2 row-span-2 group relative overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 flex flex-col items-start justify-end hover:bg-white/[0.08] hover:border-red-primary/50 transition-all duration-500 text-left min-h-[250px]"
+                        aria-label="Start Operation (Deploy)"
                     >
                         <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700">
                             <Play size={120} className="text-red-primary" />
@@ -93,9 +95,9 @@ const Home: React.FC = () => {
                             style={{ boxShadow: 'inset 0 -2px 0 rgba(204,10,30,0.8), inset 0 -20px 40px rgba(204,10,30,0.1)' }} />
                         <div className="relative z-10 w-full">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-primary mb-2 block">Primary Operation</span>
-                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white font-orbitron group-hover:translate-x-2 transition-transform duration-300">
+                            <span className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white font-orbitron group-hover:translate-x-2 transition-transform duration-300 block">
                                 Deploy
-                            </h2>
+                            </span>
                         </div>
                     </motion.button>
 
@@ -106,11 +108,12 @@ const Home: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
                         onClick={() => handleNavigation('/ranked')}
                         className="col-span-1 group relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/5 p-6 flex flex-col items-start justify-between hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 text-left min-h-[160px]"
+                        aria-label="Ranked Mode"
                     >
                         <Shield size={28} className="text-gray-400 group-hover:text-white transition-colors" />
-                        <h3 className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4">
+                        <span className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4 block">
                             Ranked
-                        </h3>
+                        </span>
                     </motion.button>
 
                     {/* TOURNAMENTS */}
@@ -120,11 +123,12 @@ const Home: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
                         onClick={() => handleNavigation('/tournaments')}
                         className="col-span-1 group relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/5 p-6 flex flex-col items-start justify-between hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 text-left min-h-[160px]"
+                        aria-label="Events and Tournaments"
                     >
                         <Target size={28} className="text-gray-400 group-hover:text-white transition-colors" />
-                        <h3 className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4">
+                        <span className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4 block">
                             Events
-                        </h3>
+                        </span>
                     </motion.button>
 
                     {/* STORE */}
@@ -134,11 +138,12 @@ const Home: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
                         onClick={() => handleNavigation('/store')}
                         className="col-span-1 group relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/5 p-6 flex flex-col items-start justify-between hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 text-left min-h-[160px]"
+                        aria-label="Armory and Store"
                     >
                         <Store size={28} className="text-gray-400 group-hover:text-white transition-colors" />
-                        <h3 className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4">
+                        <span className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4 block">
                             Armory
-                        </h3>
+                        </span>
                     </motion.button>
 
                     {/* SETTINGS */}
@@ -148,11 +153,12 @@ const Home: React.FC = () => {
                         transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
                         onClick={() => handleNavigation('/settings')}
                         className="col-span-1 group relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/5 p-6 flex flex-col items-start justify-between hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 text-left min-h-[160px]"
+                        aria-label="System Settings"
                     >
                         <Settings size={28} className="text-gray-400 group-hover:text-white transition-colors" />
-                        <h3 className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4">
+                        <span className="text-lg font-black uppercase tracking-widest text-gray-300 font-orbitron group-hover:text-white mt-4 block">
                             System
-                        </h3>
+                        </span>
                     </motion.button>
 
                     {/* SUPERUSER COMMAND CENTER */}
@@ -163,11 +169,12 @@ const Home: React.FC = () => {
                             transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
                             onClick={() => handleNavigation('/admin')}
                             className="col-span-1 group relative overflow-hidden rounded-3xl bg-red-600/[0.05] border border-red-500/20 p-6 flex flex-col items-start justify-between hover:bg-red-600/[0.1] hover:border-red-500/50 transition-all duration-500 text-left min-h-[160px]"
+                            aria-label="Superuser Command Center"
                         >
                             <Terminal size={28} className="text-red-500 group-hover:text-red-400 transition-colors animate-pulse" />
-                            <h3 className="text-lg font-black uppercase tracking-widest text-red-500 font-orbitron group-hover:text-red-400 mt-4">
+                            <span className="text-lg font-black uppercase tracking-widest text-red-500 font-orbitron group-hover:text-red-400 mt-4 block">
                                 Control
-                            </h3>
+                            </span>
                         </motion.button>
                     )}
                 </div>
@@ -177,20 +184,37 @@ const Home: React.FC = () => {
             <div className="absolute bottom-6 left-6 z-20 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[#0E0E1C] flex items-center justify-center overflow-hidden relative"
                     style={{ border: '1.5px solid rgba(204,10,30,0.45)', boxShadow: '0 0 20px rgba(204,10,30,0.25)' }}>
-                    <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${profile?.alias || localStorage.getItem('mafia_operative_alias') || 'Shadow'}`} alt="Avatar" className="w-full h-full object-cover opacity-80" />
+                    {profile ? (
+                        <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${profile?.alias || 'Shadow'}`} alt="Avatar" className="w-full h-full object-cover opacity-80" />
+                    ) : (
+                        <div className="w-full h-full bg-white/5 animate-pulse" />
+                    )}
                     <div className="absolute inset-0 bg-red-primary/10 mix-blend-overlay" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white">{profile?.alias || localStorage.getItem('mafia_operative_alias') || 'Shadow_01'}</span>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-red-highlight flex items-center gap-1">
-                        <Trophy size={10} /> {profile?.mmr > 2000 ? 'LEGEND' : profile?.mmr > 1500 ? 'MASTER' : 'DIAMOND III'}
-                    </span>
+                    {profile ? (
+                        <>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white">{profile?.alias}</span>
+                            <span className="text-[9px] font-black uppercase tracking-widest text-red-highlight flex items-center gap-1">
+                                <Trophy size={10} /> {profile?.mmr > 2000 ? 'LEGEND' : profile?.mmr > 1500 ? 'MASTER' : 'DIAMOND III'}
+                            </span>
+                        </>
+                    ) : (
+                        <div className="flex flex-col gap-1.5">
+                            <div className="w-20 h-2 bg-white/5 rounded animate-pulse" />
+                            <div className="w-12 h-2 bg-red-500/10 rounded animate-pulse" />
+                        </div>
+                    )}
                 </div>
             </div>
 
             <div className="absolute top-6 right-6 z-20 flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                    <span className="text-[12px] font-black tracking-widest text-white">{profile?.coins?.toLocaleString() || '0'}</span>
+                    {profile ? (
+                        <span className="text-[12px] font-black tracking-widest text-white">{profile?.coins?.toLocaleString()}</span>
+                    ) : (
+                        <div className="w-12 h-3 bg-white/5 rounded animate-pulse" />
+                    )}
                     <Coins size={14} className="text-yellow-500 drop-shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
                 </div>
             </div>
