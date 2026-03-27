@@ -2,7 +2,6 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
 
 # Build
 dist/
@@ -28,10 +27,8 @@ Thumbs.db
 *.swp
 *.swo
 
-# Project specific
-mobile/node_modules/
-mobile-app/node_modules/
-server/node_modules/
-web-client/node_modules/
-web/node_modules/
-server/dist/
+# Project specific (Monorepo structure)
+apps/*/node_modules/
+packages/*/node_modules/
+apps/*/dist/
+packages/*/dist/
