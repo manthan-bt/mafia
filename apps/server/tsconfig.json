@@ -9,10 +9,9 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@mafia/shared": ["../../packages/shared/src/index.ts"]
+      "@mafia/shared": ["../../packages/shared"]
     }
   },
   "include": [

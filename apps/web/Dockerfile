@@ -12,7 +12,8 @@ COPY apps/web ./apps/web
 RUN npm install -w @mafia/shared -w @mafia/web
 
 # Build
-RUN npm run build -w @mafia/shared -w @mafia/web
+RUN npm run build -w @mafia/shared
+RUN npm run build -w @mafia/web
 
 # Stage 2: Runtime (Nginx)
 FROM nginx:stable-alpine
