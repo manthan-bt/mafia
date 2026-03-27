@@ -2,21 +2,21 @@
 
 A professional, production-ready, real-time multiplayer social deduction game built with a modern TypeScript monorepo architecture.
 
-## 🚀 Architecture Overview
+## 🚀 Architecture
 
-- **Frontend:** React (TypeScript), TailwindCSS, Socket.io-client.
-- **Backend:** Node.js (Express), Socket.io, Prisma (PostgreSQL), Redis.
-- **Shared Logic:** A dedicated package for game engine and bot AI logic, shared between server and client.
-- **Infrastructure:** Fully Dockerized stack with CI/CD via GitHub Actions.
+The project follows an industry-standard **Apps/Packages** monorepo pattern:
+
+- **`apps/server`**: Node.js (Express) + Socket.io + Prisma (PostgreSQL).
+- **`apps/web`**: React (Vite) + Framer Motion + TailwindCSS.
+- **`apps/mobile`**: React Native (Expo) mobile client.
+- **`packages/shared`**: Core game engine, Bot AI, types, and logic shared across all clients.
 
 ## 🛠 Features
 
-- **Real-time Gameplay:** Smooth state transitions with Socket.io.
-- **Persistent Progress:** User accounts, MMR, and coin tracking using PostgreSQL.
-- **Scalable Real-time:** Redis-backed socket scaling for multiple server instances.
-- **Sophisticated AI:** Bots with personalities, suspicion maps, and contextual chat generation.
-- **Security:** PBKDF2 hashing, HMAC sessions, and IP-based rate limiting.
-- **CI/CD:** Automated testing and Docker build checks.
+- **Distributed Real-time**: Redis-backed Socket.io scaling.
+- **Advanced Bot AI**: Cinematic suspicion maps and personality models.
+- **Security**: PBKDF2 hashing, HMAC sessions, and code obfuscation.
+- **CI/CD**: Automated GitHub Actions for testing and Docker verification.
 
 ## 🚦 Getting Started
 
@@ -36,8 +36,7 @@ A professional, production-ready, real-time multiplayer social deduction game bu
    npm run prisma:generate
    ```
 
-### Running the App
-**Development (Local):**
+### Development
 ```bash
 # Start server
 npm run dev:server
@@ -45,21 +44,15 @@ npm run dev:server
 npm run dev:web
 ```
 
-**Production (Docker):**
+### Production (Docker)
 ```bash
 npm run docker:up
 ```
 
 ## 🧪 Testing
-Run the suite across the monorepo:
 ```bash
 npm test
 ```
 
 ## 🗺 Roadmap
-- [x] Persistent database storage.
-- [x] Socket scaling with Redis.
-- [x] Dockerization.
-- [x] CI/CD pipeline.
-- [ ] Stripe integration for monetization.
-- [ ] Global Tournament system.
+See [ROADMAP.md](./ROADMAP.md) for future milestones.
