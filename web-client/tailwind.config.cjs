@@ -1,0 +1,27 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+        extend: {
+            fontFamily: {
+                outfit: ['Outfit', 'sans-serif'],
+                orbitron: ['Orbitron', 'sans-serif'],
+            },
+            colors: {
+                dark: {
+                    900: '#020205',
+                    800: '#0a0a0f',
+                    700: '#15151e',
+                },
+                accent: {
+                    red: '#dc2626',
+                    blue: '#2563eb',
+                },
+            },
+        },
+    },
+    plugins: [],
+}

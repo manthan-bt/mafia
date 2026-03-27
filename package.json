@@ -1,0 +1,11 @@
+{
+  "name": "mafia-nightfall-protocol",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "web-client",
+    "server",
+    "shared",
+    "mobile"
+  ]
+}

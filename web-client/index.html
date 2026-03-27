@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAFIA | Nightfall Protocol</title>
+
+</head>
+
+<body class="bg-[#050510] text-white">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <script>
+    // Global Tactile Micro-vibration Hook for Mobile
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) {
+        if (navigator.vibrate) {
+          navigator.vibrate(15); // subtle 15ms haptic bump
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
