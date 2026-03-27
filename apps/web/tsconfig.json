@@ -20,11 +20,7 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "baseUrl": ".",
-        "paths": {
-            "@mafia/shared": [
-                "../../packages/shared/src/index.ts"
-            ]
-        },
+        "paths": {},
         "types": ["vite/client"]
     },
     "include": [

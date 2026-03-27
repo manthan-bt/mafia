@@ -10,9 +10,7 @@
     "strict": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@mafia/shared": ["../../packages/shared/src/index.ts"]
-    }
+    "paths": {}
   },
   "include": [
     "src/**/*.ts"
