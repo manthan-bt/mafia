@@ -1,0 +1,10 @@
+README.md
+ROADMAP.md
+docs\architecture.md
+docs\build-instructions.md
+docs\installation.md
+docs\release-notes.md
+apps\mobile\assets\adaptive-icon.png
+apps\mobile\assets\favicon.png
+apps\mobile\assets\icon.png
+apps\mobile\assets\splash-icon.png

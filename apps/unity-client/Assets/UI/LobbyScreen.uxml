@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElementsSchema.xsd" editor-extension-mode="False">
+    <Style src="project:/Assets/UI/PremiumTheme.uss" />
+    <ui:VisualElement class="premium-container">
+        <ui:VisualElement class="premium-panel" style="width: 600px;">
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom-width: 1px; border-color: rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <ui:Label text="MISSION PREPARATION" class="premium-title" style="margin-bottom: 0; font-size: 24px;" />
+                <ui:VisualElement style="flex-direction: row; align-items: center;">
+                    <ui:Label text="FREQ:" style="color: rgba(255,255,255,0.5); font-size: 12px; margin-right: 5px;" />
+                    <ui:Label name="lobbyCodeLabel" text="----" style="color: #00D1FF; font-weight: bold; letter-spacing: 2px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <ui:Label text="OPERATIVES DETECTED" style="font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 10px; letter-spacing: 1px;" />
+            
+            <ui:ScrollView name="playerList" style="height: 300px; margin-bottom: 20px; background-color: rgba(0,0,0,0.2); border-radius: 4px; padding: 10px;">
+                <!-- Player items will be injected here -->
+            </ui:ScrollView>
+            
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <ui:Label name="playerCountLabel" text="0/12 OPERATIVES" style="font-size: 12px; color: rgba(255,255,255,0.6);" />
+                <ui:Button name="startMissionBtn" text="INITIATE MISSION" class="premium-button" style="width: 200px; display: none;" />
+            </ui:VisualElement>
+
+            <ui:Button name="leaveLobbyBtn" text="ABORT" class="premium-button" style="background-color: transparent; border-width: 1px; border-color: #FF4B4B; color: #FF4B4B; margin-top: 10px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

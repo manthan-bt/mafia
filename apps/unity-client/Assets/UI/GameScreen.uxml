@@ -1,0 +1,43 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElementsSchema.xsd" editor-extension-mode="False">
+    <Style src="project:/Assets/UI/PremiumTheme.uss" />
+    <ui:VisualElement class="premium-container" style="flex-direction: row; padding: 20px;">
+        
+        <!-- Left: Operatives List -->
+        <ui:VisualElement class="premium-panel" style="width: 250px; margin-right: 20px;">
+            <ui:Label text="ACTIVE OPERATIVES" style="font-size: 14px; margin-bottom: 15px; border-bottom-width: 1px; border-color: rgba(0, 209, 255, 0.3); padding-bottom: 5px;" />
+            <ui:ScrollView name="gamePlayerList" style="flex-grow: 1;" />
+        </ui:VisualElement>
+
+        <!-- Center: Mission Feed & State -->
+        <ui:VisualElement style="flex-grow: 1; margin-right: 20px;">
+            <ui:VisualElement class="premium-panel" style="height: 120px; margin-bottom: 20px; align-items: center; justify-content: center;">
+                <ui:Label name="phaseLabel" text="STATUS: INITIALIZING" style="font-size: 28px; font-weight: bold; color: #00D1FF; letter-spacing: 4px;" />
+                <ui:Label name="timerLabel" text="00:00" style="font-size: 14px; color: rgba(255,255,255,0.6);" />
+            </ui:VisualElement>
+            
+            <ui:VisualElement class="premium-panel" style="flex-grow: 1;">
+                <ui:Label text="MISSION INTELLIGENCE" style="font-size: 14px; margin-bottom: 10px; color: rgba(255,255,255,0.4);" />
+                <ui:ScrollView name="missionLog" style="flex-grow: 1; background-color: rgba(0,0,0,0.3); padding: 15px;" />
+                
+                <!-- Dynamic Actions (Buttons injected here) -->
+                <ui:VisualElement name="actionContainer" style="flex-direction: row; justify-content: space-around; padding: 15px; border-top-width: 1px; border-color: rgba(255,255,255,0.1); display: none;">
+                    <!-- Action buttons injected by GameController -->
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Right: Secure Comms (Chat) -->
+        <ui:VisualElement class="premium-panel" style="width: 350px;">
+            <ui:Label text="SECURE COMMS" style="font-size: 14px; margin-bottom: 15px; border-bottom-width: 1px; border-color: rgba(0, 209, 255, 0.3); padding-bottom: 5px;" />
+            <ui:ScrollView name="chatContainer" style="flex-grow: 1; margin-bottom: 10px;" />
+            <ui:TextField name="chatInput" placeholder-text="TRANSMIT MESSAGE..." class="premium-input" style="margin-bottom: 0;" />
+        </ui:VisualElement>
+
+        <!-- HUD: Personal Status -->
+        <ui:VisualElement style="position: absolute; bottom: 40px; left: 40px; padding: 15px; border-left-width: 4px; border-color: #00D1FF; background-color: rgba(0,0,0,0.8);">
+            <ui:Label name="roleLabel" text="ROLE: CLASSIFIED" style="font-size: 18px; font-weight: bold; color: #00D1FF;" />
+            <ui:Label name="statusLabel" text="STATUS: ACTIVE" style="font-size: 12px; color: rgba(255,255,255,0.6);" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
