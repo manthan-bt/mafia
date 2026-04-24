@@ -1,1 +1,0 @@
-{"nodes": [{"id": "preload", "label": "preload.js", "file_type": "code", "source_file": "apps\\desktop\\preload.js", "source_location": "L1"}], "edges": [{"source": "preload", "target": "electron", "relation": "imports_from", "confidence": "EXTRACTED", "source_file": "apps\\desktop\\preload.js", "source_location": "L1", "weight": 1.0}]}

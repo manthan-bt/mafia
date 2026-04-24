@@ -1,9 +1,0 @@
-node_modules
-npm-debug.log
-dist
-build
-.git
-.env
-.dockerignore
-Dockerfile
-docker-compose.yaml
