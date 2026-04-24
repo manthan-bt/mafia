@@ -25,6 +25,7 @@ function player(id: string, role: Role, alive = true): Player {
     isHost: id === "p1",
     isReady: true,
     isConnected: true,
+    isBot: false,
     joinedAt: 1
   };
 }
@@ -40,7 +41,11 @@ function fixedGame(players: Player[], phase: Game["phase"] = "night"): Game {
       discussionSeconds: 1,
       votingSeconds: 1,
       votingMode: "majority",
-      revealRolesOnDeath: true
+      revealRolesOnDeath: true,
+      classicRolesEnabled: true,
+      botsEnabled: false,
+      botOnly: false,
+      botDifficulty: "normal"
     },
     players,
     hostId: "p1",
@@ -48,16 +53,17 @@ function fixedGame(players: Player[], phase: Game["phase"] = "night"): Game {
     nightNumber: 1,
     nightActions: [],
     votes: {},
+    chat: [],
     events: []
   };
 }
 
 describe("role scaling", () => {
   it("uses the requested scaling table", () => {
-    expect(getRoleCount(5)).toEqual({ mafia: 1, detective: 1, doctor: 0, villager: 3 });
-    expect(getRoleCount(7)).toEqual({ mafia: 2, detective: 1, doctor: 1, villager: 3 });
-    expect(getRoleCount(14)).toEqual({ mafia: 4, detective: 1, doctor: 1, villager: 8 });
-    expect(getRoleCount(30)).toEqual({ mafia: 6, detective: 1, doctor: 1, villager: 22 });
+    expect(getRoleCount(5)).toMatchObject({ mafia: 1, detective: 1, doctor: 0, villager: 3 });
+    expect(getRoleCount(7)).toMatchObject({ mafia: 2, detective: 1, doctor: 1, villager: 3 });
+    expect(getRoleCount(14)).toMatchObject({ mafia: 3, godfather: 1, roleblocker: 1, detective: 1, doctor: 1, villager: 5 });
+    expect(getRoleCount(30)).toMatchObject({ mafia: 5, godfather: 1, roleblocker: 1, serialKiller: 1, jester: 1, villager: 17 });
   });
 });
 
@@ -114,6 +120,38 @@ describe("night resolution", () => {
     expect(resolved.lastNightResolution?.investigationResults).toEqual([
       { actorId: "p3", targetId: "p1", result: "mafia", night: 1 }
     ]);
+  });
+
+  it("lets the godfather read as town", () => {
+    let game = fixedGame([
+      player("p1", "godfather"),
+      player("p2", "doctor"),
+      player("p3", "detective"),
+      player("p4", "villager"),
+      player("p5", "villager")
+    ]);
+
+    game = submitNightAction(game, { actorId: "p3", type: "investigate", targetId: "p1" }).game;
+    const resolved = resolveNight(game).game;
+
+    expect(resolved.lastNightResolution?.investigationResults[0].result).toBe("town");
+  });
+
+  it("lets roleblocker stop a night action", () => {
+    let game = fixedGame([
+      player("p1", "roleblocker"),
+      player("p2", "doctor"),
+      player("p3", "detective"),
+      player("p4", "mafia"),
+      player("p5", "villager")
+    ]);
+
+    game = submitNightAction(game, { actorId: "p1", type: "roleblock", targetId: "p2" }).game;
+    game = submitNightAction(game, { actorId: "p4", type: "mafiaKill", targetId: "p5" }).game;
+    const blockedDoctor = submitNightAction(game, { actorId: "p2", type: "protect", targetId: "p5" });
+
+    expect(blockedDoctor.error).toBe("That player is blocked tonight.");
+    expect(resolveNight(blockedDoctor.game).game.players.find((candidate) => candidate.id === "p5")?.alive).toBe(false);
   });
 });
 
@@ -172,6 +210,27 @@ describe("voting and wins", () => {
     ]);
 
     expect(checkWinCondition(game)).toBe("mafia");
+  });
+
+  it("gives the jester a win when voted out", () => {
+    let game = fixedGame(
+      [
+        player("p1", "mafia"),
+        player("p2", "jester"),
+        player("p3", "detective"),
+        player("p4", "doctor"),
+        player("p5", "villager")
+      ],
+      "voting"
+    );
+
+    game = submitVote(game, "p1", "p2").game;
+    game = submitVote(game, "p3", "p2").game;
+    game = submitVote(game, "p4", "p2").game;
+    const result = resolveVote(game);
+
+    expect(result.game.phase).toBe("gameOver");
+    expect(result.game.winner).toBe("jester");
   });
 });
 

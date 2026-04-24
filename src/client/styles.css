@@ -29,6 +29,17 @@ body {
   color: var(--text);
 }
 
+body::before {
+  background:
+    linear-gradient(rgba(216, 169, 74, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 169, 74, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+}
+
 button,
 input,
 select {
@@ -83,7 +94,7 @@ label {
   align-items: center;
   display: grid;
   gap: 3rem;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+  grid-template-columns: minmax(96px, 0.2fr) minmax(0, 1fr) minmax(320px, 430px) minmax(96px, 0.2fr);
   min-height: 100vh;
   padding: clamp(1.25rem, 4vw, 4rem);
 }
@@ -133,12 +144,135 @@ label {
   padding: 1.2rem;
 }
 
+.entry-nav {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 2rem;
+}
+
+.entry-nav button {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+  min-height: 38px;
+  padding: 0.5rem 1rem;
+}
+
+.entry-nav button.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #17100b;
+}
+
+.room-list {
+  display: grid;
+  gap: 0.6rem;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.room-item {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+}
+
+.room-item strong {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.room-item span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.room-item button {
+  min-height: 36px;
+  padding: 0.4rem 0.8rem;
+}
+
+.cta-button {
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  min-height: 52px;
+  padding: 0 2.5rem;
+}
+
+.warning {
+  color: var(--gold);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.entry-hero {
+  min-width: 0;
+}
+
+.home-showcase {
+  display: flex;
+  gap: 0.85rem;
+  margin-top: 2rem;
+  perspective: 900px;
+}
+
+.mini-card {
+  align-items: end;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  font-weight: 900;
+  height: 128px;
+  padding: 0.9rem;
+  transform: rotate(-4deg);
+  width: 94px;
+}
+
+.mini-card.blue {
+  background: linear-gradient(145deg, rgba(79, 139, 189, 0.9), rgba(20, 32, 45, 0.95));
+  transform: rotate(3deg) translateY(10px);
+}
+
+.mini-card.red {
+  background: linear-gradient(145deg, rgba(184, 70, 54, 0.9), rgba(42, 16, 13, 0.95));
+}
+
+.mini-card.gold {
+  background: linear-gradient(145deg, rgba(216, 169, 74, 0.9), rgba(53, 37, 16, 0.95));
+  transform: rotate(6deg) translateY(2px);
+}
+
 .split-controls,
 .join-row {
   align-items: end;
   display: grid;
   gap: 0.75rem;
   grid-template-columns: 1fr auto;
+}
+
+.toggle-grid,
+.bot-tools {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.check-row {
+  align-items: center;
+  color: var(--text);
+  display: flex;
+  gap: 0.55rem;
+}
+
+.check-row input {
+  accent-color: var(--gold);
+  min-height: auto;
+  width: auto;
 }
 
 .eyebrow {
@@ -169,6 +303,42 @@ label {
   max-width: 1440px;
   min-height: 100vh;
   padding: clamp(1rem, 3vw, 2rem);
+}
+
+.ad-slot {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px dashed rgba(244, 236, 224, 0.18);
+  border-radius: 8px;
+  color: rgba(244, 236, 224, 0.58);
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  min-height: 72px;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.ad-slot span {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ad-slot strong {
+  color: rgba(216, 169, 74, 0.72);
+  font-size: 0.82rem;
+}
+
+.ad-left,
+.ad-right {
+  min-height: 320px;
+  writing-mode: vertical-rl;
+}
+
+.ad-top,
+.ad-bottom {
+  min-height: 76px;
 }
 
 .top-bar {
@@ -233,6 +403,24 @@ label {
   line-height: 1.5;
 }
 
+.room-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.secondary-button.danger {
+  border-color: rgba(184, 70, 54, 0.5);
+  color: #ffb4a9;
+}
+
 .intel {
   border-left: 3px solid var(--gold);
   color: var(--text) !important;
@@ -243,7 +431,7 @@ label {
   align-items: start;
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(300px, 1fr) minmax(300px, 0.8fr) minmax(300px, 0.9fr);
+  grid-template-columns: minmax(300px, 1fr) minmax(300px, 0.85fr) minmax(320px, 1fr);
 }
 
 .panel-heading {
@@ -306,6 +494,108 @@ label {
   gap: 1rem;
 }
 
+.chat-panel,
+.vote-panel {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.chat-feed {
+  display: grid;
+  gap: 0.55rem;
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.chat-line {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+}
+
+.chat-line strong {
+  color: var(--gold);
+  display: block;
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+
+.chat-line p {
+  line-height: 1.45;
+  margin: 0;
+}
+
+.bot-chat {
+  border-color: rgba(79, 139, 189, 0.28);
+}
+
+.bot-chat strong::after {
+  color: var(--muted);
+  content: " bot";
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-left: 0.3rem;
+}
+
+.chat-compose {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr auto;
+}
+
+.vote-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.vote-row {
+  align-items: center;
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(90px, 1fr) auto;
+}
+
+.vote-row span {
+  color: var(--muted);
+  display: block;
+  font-size: 0.8rem;
+}
+
+meter {
+  width: 100%;
+}
+
+.role-reveal-backdrop {
+  align-items: center;
+  background: rgba(10, 8, 7, 0.72);
+  display: grid;
+  inset: 0;
+  padding: 1rem;
+  place-items: center;
+  position: fixed;
+  z-index: 20;
+}
+
+.role-reveal-card {
+  background: linear-gradient(145deg, rgba(37, 31, 26, 0.98), rgba(18, 15, 13, 0.98));
+  border: 1px solid rgba(216, 169, 74, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 26px 100px rgba(0, 0, 0, 0.6);
+  max-width: 430px;
+  padding: clamp(1.2rem, 4vw, 2rem);
+  text-align: center;
+  width: min(100%, 430px);
+}
+
+.role-reveal-card h2 {
+  font-size: clamp(2.2rem, 8vw, 4.4rem);
+  letter-spacing: 0;
+  line-height: 0.9;
+  margin: 0.25rem 0 1rem;
+}
+
 .winner {
   align-items: center;
   border: 1px solid rgba(216, 169, 74, 0.35);
@@ -358,6 +648,15 @@ label {
     grid-template-columns: 1fr;
   }
 
+  .ad-left,
+  .ad-right {
+    display: none;
+  }
+
+  .home-showcase {
+    display: none;
+  }
+
   .top-bar {
     align-items: start;
     flex-direction: column;
@@ -372,6 +671,15 @@ label {
 
   .split-controls,
   .join-row {
+    grid-template-columns: 1fr;
+  }
+
+  .room-tools {
+    display: grid;
+  }
+
+  .chat-compose,
+  .vote-row {
     grid-template-columns: 1fr;
   }
 

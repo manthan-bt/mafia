@@ -1,5 +1,6 @@
-import { buildRoleDeck, getTeam } from "./roles";
+import { buildRoleDeck, getDetectiveRead, getTeam, isMafiaRole } from "./roles";
 import type {
+  ChatMessage,
   ClientGameState,
   Game,
   GameEvent,
@@ -18,7 +19,11 @@ export const DEFAULT_SETTINGS: GameSettings = {
   discussionSeconds: 180,
   votingSeconds: 60,
   votingMode: "majority",
-  revealRolesOnDeath: true
+  revealRolesOnDeath: true,
+  classicRolesEnabled: true,
+  botsEnabled: false,
+  botOnly: false,
+  botDifficulty: "normal"
 };
 
 export type EngineResult<T = Game> = {
@@ -37,6 +42,7 @@ function cloneGame(game: Game): Game {
     players: game.players.map((player) => ({ ...player })),
     nightActions: game.nightActions.map((action) => ({ ...action })),
     votes: { ...game.votes },
+    chat: game.chat.map((message) => ({ ...message })),
     events: game.events.map((event) => ({ ...event })),
     lastNightResolution: game.lastNightResolution
       ? {
@@ -74,6 +80,7 @@ export function createGame(host: { id: string; name: string }, options: Partial<
     isHost: true,
     isReady: true,
     isConnected: true,
+    isBot: false,
     alive: true,
     joinedAt: Date.now()
   };
@@ -89,6 +96,7 @@ export function createGame(host: { id: string; name: string }, options: Partial<
     nightNumber: 0,
     nightActions: [],
     votes: {},
+    chat: [],
     events: [makeEvent(`${hostPlayer.name} created the room.`)]
   };
 }
@@ -124,6 +132,7 @@ export function addPlayer(game: Game, player: { id: string; name: string }): Eng
     isHost: false,
     isReady: false,
     isConnected: true,
+    isBot: false,
     alive: true,
     joinedAt: Date.now()
   });
@@ -152,6 +161,74 @@ export function setConnected(game: Game, playerId: string, isConnected: boolean)
   return { game: next };
 }
 
+export function addChatMessage(game: Game, playerId: string, text: string): EngineResult {
+  const next = cloneGame(game);
+  const player = next.players.find((candidate) => candidate.id === playerId);
+  const clean = text.trim().replace(/\s+/g, " ").slice(0, 220);
+  if (!player) {
+    return { game: next, error: "Player not found." };
+  }
+  if (!clean) {
+    return { game: next, error: "Message cannot be empty." };
+  }
+  if (!player.alive && next.phase !== "gameOver") {
+    return { game: next, error: "Dead players can watch, but table chat is locked." };
+  }
+
+  const message: ChatMessage = {
+    id: defaultId(),
+    at: Date.now(),
+    playerId: player.id,
+    playerName: player.name,
+    isBot: player.isBot,
+    text: clean
+  };
+  next.chat.push(message);
+  if (next.chat.length > 80) {
+    next.chat = next.chat.slice(-80);
+  }
+  return { game: next };
+}
+
+export function updateSettings(game: Game, settings: Partial<GameSettings>): EngineResult {
+  const next = cloneGame(game);
+  if (next.phase !== "lobby") {
+    return { game: next, error: "Room settings can only change in the lobby." };
+  }
+
+  next.settings = {
+    ...next.settings,
+    ...settings,
+    maxPlayers: Math.max(next.settings.minPlayers, Math.min(30, settings.maxPlayers ?? next.settings.maxPlayers))
+  };
+  if (next.settings.botOnly) {
+    next.settings.botsEnabled = true;
+  }
+  next.events.push(makeEvent("Room settings updated."));
+  return { game: next };
+}
+
+export function leaveGame(game: Game, playerId: string): EngineResult {
+  const next = cloneGame(game);
+  const leaving = next.players.find((player) => player.id === playerId);
+  if (!leaving) {
+    return { game: next };
+  }
+
+  if (next.phase === "lobby") {
+    next.players = next.players.filter((player) => player.id !== playerId);
+    next.events.push(makeEvent(`${leaving.name} left the room.`));
+    if (leaving.isHost && next.players.length > 0) {
+      next.hostId = next.players[0].id;
+      next.players = next.players.map((player, index) => ({ ...player, isHost: index === 0, isReady: index === 0 ? true : player.isReady }));
+      next.events.push(makeEvent(`${next.players[0].name} is now host.`));
+    }
+    return { game: next };
+  }
+
+  return setConnected(next, playerId, false);
+}
+
 export function startGame(game: Game, hostId: string, random: () => number = Math.random): EngineResult {
   const next = cloneGame(game);
 
@@ -171,7 +248,7 @@ export function startGame(game: Game, hostId: string, random: () => number = Mat
     return { game: next, error: "Every player must be ready before the game starts." };
   }
 
-  next.players = assignRoles(next.players, random);
+  next.players = assignRoles(next.players, random, next.settings.classicRolesEnabled);
   next.phase = "roleReveal";
   next.dayNumber = 0;
   next.nightNumber = 0;
@@ -181,13 +258,86 @@ export function startGame(game: Game, hostId: string, random: () => number = Mat
   return { game: next };
 }
 
-export function assignRoles(players: Player[], random: () => number = Math.random): Player[] {
-  const deck = shuffle(buildRoleDeck(players.length), random);
+export function resetToLobby(game: Game): EngineResult {
+  const next = cloneGame(game);
+  next.phase = "lobby";
+  next.dayNumber = 0;
+  next.nightNumber = 0;
+  next.phaseEndsAt = undefined;
+  next.nightActions = [];
+  next.votes = {};
+  next.chat = [];
+  next.events = [makeEvent("The game has been reset to the lobby.")];
+  next.lastNightResolution = undefined;
+  next.winner = undefined;
+  next.players = next.players.map((player) => ({
+    ...player,
+    alive: true,
+    role: undefined,
+    isReady: player.isHost || player.isBot
+  }));
+  return { game: next };
+}
+
+export function assignRoles(players: Player[], random: () => number = Math.random, classicRolesEnabled = true): Player[] {
+  const deck = shuffle(buildRoleDeck(players.length, classicRolesEnabled), random);
   return players.map((player, index) => ({
     ...player,
     alive: true,
     role: deck[index]
   }));
+}
+
+export function addBot(game: Game, name?: string): EngineResult {
+  const next = cloneGame(game);
+  if (next.phase !== "lobby") {
+    return { game: next, error: "Bots can only be added in the lobby." };
+  }
+  if (!next.settings.botsEnabled && !next.settings.botOnly) {
+    return { game: next, error: "Enable bot play before adding bots." };
+  }
+  if (next.players.length >= next.settings.maxPlayers) {
+    return { game: next, error: `This room is capped at ${next.settings.maxPlayers} players.` };
+  }
+  const botNumber = next.players.filter((player) => player.isBot).length + 1;
+  const botName = name?.trim() || BOT_NAMES[(botNumber - 1) % BOT_NAMES.length];
+  next.players.push({
+    id: `bot-${defaultId()}`,
+    name: botName,
+    isHost: false,
+    isReady: true,
+    isConnected: true,
+    isBot: true,
+    alive: true,
+    joinedAt: Date.now()
+  });
+  next.events.push(makeEvent(`${botName} joined as a bot.`));
+  return { game: next };
+}
+
+export function removeBot(game: Game, botId: string): EngineResult {
+  const next = cloneGame(game);
+  if (next.phase !== "lobby") {
+    return { game: next, error: "Bots can only be removed in the lobby." };
+  }
+  const bot = next.players.find((player) => player.id === botId && player.isBot);
+  if (!bot) {
+    return { game: next, error: "Bot not found." };
+  }
+  next.players = next.players.filter((player) => player.id !== botId);
+  next.events.push(makeEvent(`${bot.name} left the table.`));
+  return { game: next };
+}
+
+export function fillBotsToMinimum(game: Game): EngineResult {
+  let result: EngineResult = { game };
+  while (result.game.players.length < result.game.settings.minPlayers) {
+    result = addBot(result.game);
+    if (result.error) {
+      return result;
+    }
+  }
+  return result;
 }
 
 export function beginNight(game: Game): EngineResult {
@@ -244,10 +394,20 @@ export function submitNightAction(game: Game, action: NightAction): EngineResult
     return { game: next, error: "Only living players can target living players." };
   }
 
+  const blockedActorIds = next.nightActions
+    .filter((existing) => existing.type === "roleblock")
+    .map((existing) => existing.targetId);
+  if (blockedActorIds.includes(action.actorId)) {
+    return { game: next, error: "That player is blocked tonight." };
+  }
+
   const allowed =
-    (action.type === "mafiaKill" && actor.role === "mafia") ||
+    (action.type === "mafiaKill" && isMafiaRole(actor.role)) ||
     (action.type === "investigate" && actor.role === "detective") ||
-    (action.type === "protect" && actor.role === "doctor");
+    (action.type === "protect" && actor.role === "doctor") ||
+    (action.type === "vigilanteKill" && actor.role === "vigilante") ||
+    (action.type === "serialKill" && actor.role === "serialKiller") ||
+    (action.type === "roleblock" && actor.role === "roleblocker");
 
   if (!allowed) {
     return { game: next, error: "That role cannot perform this action." };
@@ -271,10 +431,18 @@ export function resolveNight(game: Game): EngineResult {
   }
 
   const kill = next.nightActions.find((action) => action.type === "mafiaKill");
+  const vigilanteKill = next.nightActions.find((action) => action.type === "vigilanteKill");
+  const serialKill = next.nightActions.find((action) => action.type === "serialKill");
+  const blocks = next.nightActions.filter((action) => action.type === "roleblock");
+  const blockedPlayerIds = blocks.map((action) => action.targetId);
   const protects = next.nightActions.filter((action) => action.type === "protect");
-  const investigations = next.nightActions.filter((action) => action.type === "investigate");
-  const saved = kill ? protects.find((action) => action.targetId === kill.targetId) : undefined;
-  const killedPlayerId = kill && !saved ? kill.targetId : undefined;
+  const investigations = next.nightActions.filter((action) => action.type === "investigate" && !blockedPlayerIds.includes(action.actorId));
+  const saved = kill ? protects.find((action) => action.targetId === kill.targetId && !blockedPlayerIds.includes(action.actorId)) : undefined;
+  const killedPlayerId = kill && !saved && !blockedPlayerIds.includes(kill.actorId) ? kill.targetId : undefined;
+  const secondaryKilledPlayerId = [vigilanteKill, serialKill]
+    .filter((action): action is NonNullable<typeof action> => Boolean(action && !blockedPlayerIds.includes(action.actorId)))
+    .map((action) => action.targetId)
+    .find((targetId) => targetId !== killedPlayerId && !protects.some((protect) => protect.targetId === targetId));
 
   if (killedPlayerId) {
     const killed = next.players.find((player) => player.id === killedPlayerId);
@@ -286,6 +454,14 @@ export function resolveNight(game: Game): EngineResult {
     next.events.push(makeEvent("No one was eliminated during the night."));
   }
 
+  if (secondaryKilledPlayerId) {
+    const killed = next.players.find((player) => player.id === secondaryKilledPlayerId);
+    if (killed) {
+      killed.alive = false;
+      next.events.push(makeEvent(`${killed.name} was also eliminated before sunrise.`));
+    }
+  }
+
   const investigationResults = investigations
     .map((action) => {
       const target = next.players.find((player) => player.id === action.targetId);
@@ -295,7 +471,7 @@ export function resolveNight(game: Game): EngineResult {
       return {
         actorId: action.actorId,
         targetId: action.targetId,
-        result: getTeam(target.role),
+        result: getDetectiveRead(target.role),
         night: next.nightNumber
       };
     })
@@ -308,7 +484,9 @@ export function resolveNight(game: Game): EngineResult {
 
   const resolution: NightResolution = {
     killedPlayerId,
+    secondaryKilledPlayerId,
     savedPlayerId: saved?.targetId,
+    blockedPlayerIds,
     investigationResults
   };
   next.phase = "nightResolution";
@@ -350,9 +528,11 @@ export function resolveVote(game: Game): EngineResult & { eliminatedPlayerId?: s
 
   const livingPlayers = next.players.filter((player) => player.alive);
   const counts = new Map<string, number>();
-  for (const targetId of Object.values(next.votes)) {
+  for (const [voterId, targetId] of Object.entries(next.votes)) {
     if (livingPlayers.some((player) => player.id === targetId)) {
-      counts.set(targetId, (counts.get(targetId) ?? 0) + 1);
+      const voter = next.players.find((player) => player.id === voterId);
+      const voteWeight = voter?.role === "mayor" ? 2 : 1;
+      counts.set(targetId, (counts.get(targetId) ?? 0) + voteWeight);
     }
   }
 
@@ -384,6 +564,12 @@ export function resolveVote(game: Game): EngineResult & { eliminatedPlayerId?: s
       eliminated.alive = false;
       const roleText = next.settings.revealRolesOnDeath && eliminated.role ? ` They were ${eliminated.role}.` : "";
       next.events.push(makeEvent(`${eliminated.name} was voted out.${roleText}`));
+      if (eliminated.role === "jester") {
+        next.phase = "gameOver";
+        next.winner = "jester";
+        next.events.push(makeEvent("The Jester wins by getting voted out."));
+        return { game: next, eliminatedPlayerId };
+      }
     }
   } else {
     next.events.push(makeEvent("The vote failed to eliminate anyone."));
@@ -403,10 +589,16 @@ export function resolveVote(game: Game): EngineResult & { eliminatedPlayerId?: s
 
 export function checkWinCondition(game: Game): Winner | undefined {
   const living = game.players.filter((player) => player.alive && player.role);
-  const mafia = living.filter((player) => player.role === "mafia").length;
+  const mafia = living.filter((player) => player.role && getTeam(player.role) === "mafia").length;
+  const serialKillers = living.filter((player) => player.role === "serialKiller").length;
+  const town = living.filter((player) => player.role && getTeam(player.role) === "town").length;
   const nonMafia = living.length - mafia;
 
-  if (mafia === 0 && living.length > 0) {
+  if (serialKillers > 0 && living.length <= serialKillers + 1 && mafia === 0) {
+    return "serialKiller";
+  }
+
+  if (mafia === 0 && serialKillers === 0 && town > 0) {
     return "town";
   }
 
@@ -424,6 +616,7 @@ export function toPublicPlayer(player: Player, revealRole = false): PublicPlayer
     isHost: player.isHost,
     isReady: player.isReady,
     isConnected: player.isConnected,
+    isBot: player.isBot,
     alive: player.alive,
     role: revealRole ? player.role : undefined
   };
@@ -433,8 +626,8 @@ export function toClientState(game: Game, viewerId?: string): ClientGameState {
   const viewer = game.players.find((player) => player.id === viewerId);
   const gameEnded = game.phase === "gameOver";
   const publicEvents = game.events.filter((event) => event.scope === "public" || event.playerId === viewerId);
-  const mafiaTeam = viewer?.role === "mafia" || gameEnded
-    ? game.players.filter((player) => player.role === "mafia").map((player) => toPublicPlayer(player, true))
+  const mafiaTeam = isMafiaRole(viewer?.role) || gameEnded
+    ? game.players.filter((player) => isMafiaRole(player.role)).map((player) => toPublicPlayer(player, true))
     : [];
 
   return {
@@ -447,6 +640,7 @@ export function toClientState(game: Game, viewerId?: string): ClientGameState {
     nightNumber: game.nightNumber,
     phaseEndsAt: game.phaseEndsAt,
     votes: { ...game.votes },
+    chat: game.chat,
     events: publicEvents,
     lastNightResolution: game.lastNightResolution
       ? {
@@ -472,3 +666,16 @@ function collectInvestigationResults(game: Game, playerId: string) {
   const fromEvents = fromResolution.filter((result) => result.actorId === playerId);
   return fromEvents;
 }
+
+const BOT_NAMES = [
+  "Nico",
+  "Mira",
+  "Sal",
+  "Iris",
+  "Theo",
+  "Rafa",
+  "June",
+  "Omar",
+  "Lena",
+  "Vik"
+];

@@ -31,6 +31,10 @@ npm run build
 2. Join from other browser tabs with the displayed room code.
 3. Mark players ready and start with at least five players.
 4. Confirm each player only sees their own role and legal private action.
-5. Submit night actions as Mafia, Detective, and Doctor.
-6. Advance through day discussion, voting, elimination, and game over.
-7. Resize to phone width and confirm phase, timer, player state, actions, and log remain readable.
+5. Use the role reveal card to confirm the private role before night starts.
+6. Send table chat; in bot-enabled rooms, bots reply after a short human-like delay.
+7. Try bot difficulty from Easy to Impossible; higher levels use public table signals better without seeing hidden Town roles.
+8. Submit night actions as Mafia, Detective, Doctor, Roleblocker, Vigilante, or Serial Killer.
+9. Use the Vote Board to track vote counts and majority threshold.
+10. Advance through day discussion, voting, elimination, and game over.
+11. Resize to phone width and confirm phase, timer, player state, chat, voting, actions, and ads remain readable.
